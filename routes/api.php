@@ -38,4 +38,7 @@ Route::group(['prefix' => "{$api_version}",'middleware' => 'auth:sanctum'],funct
     Route::post('task', [TaskController::class,'create']);
     Route::put('task/{id}', [TaskController::class,'update']);
     Route::delete('task/{id}', [TaskController::class,'delete']);
+    Route::get('users-teams', [TaskController::class,'getTeams']);
+    Route::post('assign-task', [TaskController::class,'assignTask']);
+    Route::post('update-task-status', [TaskController::class,'updateStatus']);
 }); 

@@ -105,4 +105,54 @@ class TaskController extends Controller
             return response()->json(['errors' => 'Unauthorized Access'], 401);
         }
     }
+    public function getTeams(Request $request){
+        if($request->user()->user_role == 'PRODUCT_OWNER'){
+            $users = User::where('user_role','TEAM_MEMBER')->get();
+            if($users){
+                return response()->json(['status' => 'success','users'=>$users]);
+            } else {
+                return response()->json(['status' => 'Data is not updated'], 200);
+            }
+        }else{
+            return response()->json(['errors' => 'Unauthorized Access'], 401);
+        }
+    }
+
+    public function assignTask(Request $request){
+        if($request->user()->user_role == 'PRODUCT_OWNER'){
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'task_id' => 'required'
+            ]);
+             
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->messages()], 422);
+            }
+            $updateTask = Task::find($request['task_id']);
+            $updateTask->user_id = $request['user_id'];
+            $updateTask->save();
+            return response()->json(['status' => 'Task has been assigned successfully'], 200);
+        }else{
+            return response()->json(['errors' => 'Unauthorized Access'], 401);
+        }
+    }
+
+    public function updateStatus(Request $request){
+        if($request->user()->user_role == 'TEAM_MEMBER'){
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|string|in:NOT_STARTED,IN_PROGRESS, READY_FOR_TEST,COMPLETED',
+                'task_id' => 'required'
+            ]);
+             
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->messages()], 422);
+            }
+            $updateTask = Task::find($request['task_id']);
+            $updateTask->status = $request['status'];
+            $updateTask->save();
+            return response()->json(['status' => 'Task status has been updated successfully'], 200);
+        }else{
+            return response()->json(['errors' => 'Unauthorized Access'], 401);
+        }
+    }
 }
