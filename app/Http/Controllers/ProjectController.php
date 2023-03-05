@@ -13,7 +13,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         if($request->user()->user_role == 'PRODUCT_OWNER'){
-            $projects = Project::all('name','created_at');
+            $projects = Project::where('name','like','%'.$request['q'].'%')->orderBy($request['sortBy'],$request['sortDirection'])->limit($request['pageSize'])->offset($request['pageSize']*$request['pageIndex'])->get();
             if($projects){
                 return response()->json(['status' => 'success','projects'=>$projects],200);
             } else {
