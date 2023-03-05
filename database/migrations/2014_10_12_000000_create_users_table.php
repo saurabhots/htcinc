@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('user_role');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('oauth_token')->nullable();
             $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
