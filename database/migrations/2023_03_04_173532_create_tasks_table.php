@@ -17,9 +17,9 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
-            $table->string('status');
+            $table->enum('status', ['NOT_STARTED', 'IN_PROGRESS', 'READY_FOR_TEST','COMPLETED'])->default('NOT_STARTED');
             $table->integer('project_id');
-            $table->integer('user_id');
+            $table->integer('user_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
